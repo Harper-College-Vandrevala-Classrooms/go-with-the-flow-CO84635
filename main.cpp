@@ -19,7 +19,8 @@ int main() {
         HeatFlow h(initial_temperature, number_of_sections, K, sources_and_sinks);
         h.tick();
         auto data1 = h.getHeatFlowData();
-        assert(data1[0] < 90.01);  
+        assert(data1[0] < 90.01);
+        assert(data1[0] > 89.99); 
     }
 
     // Test case 2: Multiple sections with heat source at the start
@@ -35,8 +36,11 @@ int main() {
         auto data2 = h.getHeatFlowData();
         double expected_T1 = 20 + K * (50 - 2 * 20 + 20);
         assert(data2[0] < 50.01);  
-        assert(data2[1] < (expected_T1 + 0.01));  
+        assert(data2[0] > 49.99);
+        assert(data2[1] < (expected_T1 + 0.01));
+        assert(data2[1] > (expected_T1 - 0.01));  
         assert(data2[2] < 20.01);  
+        assert(data2[2] > 19.99);
     }
 
     // Test case 3: Heat source in the middle
@@ -51,11 +55,16 @@ int main() {
         h.tick();
         auto data3 = h.getHeatFlowData();
         double expected_T2 = 40 + K * (200 - 2 * 40 + 40);
-        assert(data3[0] < 40.01);     
-        assert(data3[1] < (expected_T2 + 0.01));    
-        assert(data3[2] < 200.01);     
-        assert(data3[3] < (expected_T2 + 0.01));     
-        assert(data3[4] < 40.01);      
+        assert(data3[0] < 40.01);
+        assert(data3[0] > 39.99);     
+        assert(data3[1] < (expected_T2 + 0.01));
+        assert(data3[1] > (expected_T2 - 0.01));    
+        assert(data3[2] < 200.01);
+        assert(data3[2] > 199.99);     
+        assert(data3[3] < (expected_T2 + 0.01));
+        assert(data3[3] > (expected_T2 - 0.01));     
+        assert(data3[4] < 40.01);
+        assert(data3[4] > 39.99);      
     }
 
     // Test case 4: Heat source at start and sink at end
@@ -70,11 +79,15 @@ int main() {
         HeatFlow h(initial_temperature, number_of_sections, K, sources_and_sinks);
         h.tick();
         auto data4 = h.getHeatFlowData();
-        double expected_T1 = 35 + K * (80 - 2 * 35 + 35);
-        assert(data4[0] < 80.01); 
-        assert(data4[1] < (expected_T1 + 0.01));  
-        assert(data4[2] < 35.01);  
-        assert(data4[3] < 15.01);  
+        double expected_T3 = 35 + K * (80 - 2 * 35 + 35);
+        assert(data4[0] < 80.01);
+        assert(data4[0] > 79.99); 
+        assert(data4[1] < (expected_T3 + 0.01));
+        assert(data4[1] > (expected_T3 - 0.01));  
+        assert(data4[2] < 31.01);
+        assert(data4[2] > 30.99);  
+        assert(data4[3] < 15.01);
+        assert(data4[3] > 14.99);  
     }
 
     // Test case 5: No heat source, just initial temperature
@@ -88,7 +101,8 @@ int main() {
         h.tick();        
         auto data5 = h.getHeatFlowData();
         for (int i = 0; i < number_of_sections; i++) {
-            assert(data5[i] < (initial_temperature + 0.01)); 
+            assert(data5[i] < (initial_temperature + 0.01));
+            assert(data5[i] > (initial_temperature - 0.01)); 
         }
     }
 
